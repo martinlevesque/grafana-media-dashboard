@@ -1,0 +1,10 @@
+version: "3"
+services:
+  grafana: # https://github.com/grafana/grafana
+    network_mode: "host"
+    restart: always
+    image: grafana/grafana:10.0.0
+  graphite:
+    network_mode: "host"
+    image: graphiteapp/graphite-statsd
+    restart: always
