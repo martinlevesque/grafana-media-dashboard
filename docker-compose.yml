@@ -3,8 +3,8 @@ services:
   grafana: # https://github.com/grafana/grafana
     network_mode: "host"
     restart: always
-    image: grafana/grafana:10.0.0
+    image: grafana/grafana:10.0.8
   graphite:
     network_mode: "host"
-    image: graphiteapp/graphite-statsd
+    image: graphiteapp/graphite-statsd:1.1.10-5
     restart: always
