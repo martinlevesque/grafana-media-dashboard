@@ -10,14 +10,13 @@ parser = argparse.ArgumentParser(
     description="",
 )
 
-parser.add_argument("-n", "--hostname")
-parser.add_argument("-m", "--mount-path")
+parser.add_argument("-n", "--hostname", required=True)
+parser.add_argument("-m", "--mount-path", required=True)
 
 parsed_args = parser.parse_args()
 
 def df_json() -> list:
     cmd_line = "df"
-    print(f"Running: {cmd_line}")
 
     result = os.popen(f"{cmd_line}").read()
     lines = result.splitlines()
@@ -39,17 +38,22 @@ def df_line_parse(line):
 
     return { "utilization": perc_util, "mount": mountpoint }
 
+df_entries = df_json()
 
+mount_entries = list(filter(lambda x: x["mount"] == parsed_args.mount_path, df_entries))
+mount_entry = {}
 
-
-df_json()
-
-print(f"{parsed_args.hostname}")
+if len(mount_entries):
+    mount_entry = mount_entries[0]
+else:
+    print(f"Mount path {parsed_args.mount_path} not found")
+    exit(1)
 
 CARBON_SERVER = '0.0.0.0'
 CARBON_PORT = 2003
 
-message = 'martin-old-server.disk-perc-use 0.10 %d\n' % int(time.time())
+util = mount_entry["utilization"]
+message = f"{parsed_args.hostname}.disk-perc-use {util} {int(time.time())}\n"
 
 print('sending message:\n%s' % message)
 sock = socket.socket()
