@@ -23,6 +23,7 @@ services:
       - 8888:8080
     volumes:
       - ./graphite/storage:/opt/graphite/storage
+      - ./conf/storage-aggregation.conf:/opt/graphite/conf/storage-aggregation.conf
 
 networks:
   media-dashboard:
