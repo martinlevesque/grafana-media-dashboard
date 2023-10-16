@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("-n", "--hostname", required=True)
 parser.add_argument("-m", "--mount-path", required=True)
+parser.add_argument("-a", "--mount-name", required=True)
 
 parsed_args = parser.parse_args()
 
@@ -53,7 +54,7 @@ CARBON_SERVER = '0.0.0.0'
 CARBON_PORT = 2003
 
 util = mount_entry["utilization"]
-message = f"{parsed_args.hostname}.disk-perc-use {util} {int(time.time())}\n"
+message = f"{parsed_args.hostname}-{parsed_args.mount_name}.disk-perc-use {util} {int(time.time())}\n"
 
 print('sending message:\n%s' % message)
 sock = socket.socket()
